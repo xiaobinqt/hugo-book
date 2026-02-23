@@ -1,8 +1,14 @@
-# hugo server --minify --themesDir ../.. --baseURL=http://0.0.0.0:1313/theme/hugo-book/
+# hugo server --minify --themesDir ../..
 
-baseURL: https://example.com/
+# for maximum cleanups and rebuilds, run where you checked out the repository
+# hugo server --printPathWarnings --disableFastRender --cleanDestinationDir=true --logLevel=debug \
+# --gc -M -s exampleSite --themesDir ../.. -b http://127.0.0.1/
+
+baseURL: http://0.0.0.0:1313/hugo-book/
 title: Hugo Book
 theme: hugo-book
+
+copyright: "[© CC BY 4.0](https://creativecommons.org/licenses/by/4.0/legalcode)"
 
 # Book configuration
 disablePathToLower: true
@@ -15,6 +21,8 @@ markup:
       unsafe: true
   tableOfContents:
     startLevel: 1
+  highlight:
+    style: base16-snazzy
 
 # Multi-lingual mode config
 # There are different options to translate files
@@ -36,6 +44,24 @@ languages:
     weight: 3
 
 menu:
+  home:
+    - name: "Documentation"
+      pageRef: "/docs/example/"
+      weight: 1
+    - pageRef: "/docs/example/"
+      weight: 10
+      parent: "Documentation"
+    - name: "Shortcodes"
+      pageRef: "/docs/shortcodes/buttons/"
+      weight: 20
+      parent: "Documentation"
+    - name: "Showcases"
+      pageRef: "/showcases/"
+      weight: 2
+    - name: "Github"
+      url: "https://github.com/alex-shpak/hugo-book/"
+      weight: 3
+
   # before: []
   after:
     - name: "Github"
@@ -50,10 +76,10 @@ params:
   # Theme 'auto' switches between dark and light modes based on browser/os preferences
   BookTheme: "light"
 
-  # (Optional, default true) Controls table of contents visibility on right side of pages.
-  # Start and end levels can be controlled with markup.tableOfContents setting.
+  # (Optional, default none) Controls table of contents visibility on right side of pages.
+  # Start and end levels can be controlled globally with markup.tableOfContents setting.
   # You can also specify this parameter per page in front matter.
-  BookToC: true
+  # BookToC: true
 
   # (Optional, default favicon.png) Set the path to a favicon file.
   # If the favicon is /static/favicon.png then the path would be favicon.png
@@ -68,25 +94,20 @@ params:
   # For backward compatibility you can set '*' to render all sections to menu. Acts same as '/'
   BookSection: docs
 
-  # Set source repository location.
-  # Used for 'Last Modified' and 'Edit this page' links.
-  BookRepo: https://github.com/alex-shpak/hugo-book
+  # (Optional, default none) Set template for commit link for the page. Requires enableGitInfo.
+  # When set enabled 'Last Modified' and a link to the commit in the footer of the page.
+  # Param is executed as template using .Site, .Page and .GitInfo as context.
+  BookLastChangeLink: 'https://github.com/alex-shpak/hugo-book/commit/{{ .GitInfo.Hash }}'
 
-  # (Optional, default 'commit') Specifies commit portion of the link to the page's last modified
-  # commit hash for 'doc' page type.
-  # Requires 'BookRepo' param.
-  # Value used to construct a URL consisting of BookRepo/BookCommitPath/<commit-hash>
-  # Github uses 'commit', Bitbucket uses 'commits'
-  # BookCommitPath: commit
+  # (Optional, default none) Set template for edit page link.
+  # When set enabled 'Edit this page' link in the footer of the page.
+  # Param is executed as template using .Site, .Page and .Path as context.
+  BookEditLink: 'https://github.com/alex-shpak/hugo-book/edit/main/exampleSite/{{ .Path }}'
 
-  # Enable "Edit this page" links for 'doc' page type.
-  # Disabled by default. Uncomment to enable. Requires 'BookRepo' param.
-  # Edit path must point to root directory of repo.
-  BookEditPath: edit/main/exampleSite
-
-  # Configure the date format used on the pages
+  # (Optional, default 'January 2, 2006') Configure the date format used on the pages
   # - In git information
   # - In blog posts
+  # https://gohugo.io/functions/time/format/
   BookDateFormat: "January 2, 2006"
 
   # (Optional, default true) Enables search function with flexsearch,
@@ -95,7 +116,7 @@ params:
   BookSearch: true
 
   # (Optional, default true) Enables comments template on pages
-  # By default partals/docs/comments.html includes Disqus template
+  # By default partials/docs/comments.html includes Disqus template
   # See https://gohugo.io/content-management/comments/#configure-disqus
   # Can be overwritten by same param in page frontmatter
   BookComments: true
@@ -103,12 +124,15 @@ params:
   # /!\ This is an experimental feature, might be removed or changed at any time
   # (Optional, experimental, default false) Enables portable links and link checks in markdown pages.
   # Portable links meant to work with text editors and let you write markdown without {{< relref >}} shortcode
-  # Theme will print warning if page referenced in markdown does not exists.
-  BookPortableLinks: true
+  # Hugo Book will print warning or error if page referenced in markdown does not exists.
+  # Possible values are false | 'warning' | 'error'
+  BookPortableLinks: 'warning'
 
   # /!\ This is an experimental feature, might be removed or changed at any time
-  # (Optional, experimental, default false) Enables service worker that caches visited pages and resources for offline use.
-  BookServiceWorker: true
+  # (Optional, experimental, default false)
+  # When set to 'preache' it enables a service worker that caches visited pages and resources for offline use.
+  # Possible values are false | true | 'precache'
+  BookServiceWorker: "precache"
 
   # /!\ This is an experimental feature, might be removed or changed at any time
   # (Optional, experimental, default false) Enables a drop-down menu for translations only if a translation is present.

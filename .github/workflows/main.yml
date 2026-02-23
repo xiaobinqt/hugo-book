@@ -9,7 +9,7 @@ jobs:
       matrix:
         hugo-version:
           - 'latest'
-          - '0.134.2'
+          - '0.146.7'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,10 +25,3 @@ jobs:
       - name: Run Hugo
         working-directory: exampleSite
         run: hugo --themesDir ../..
-
-      # - name: Deploy
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./public
-
